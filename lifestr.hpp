@@ -14,9 +14,9 @@ private:
 public:
   lifestr() : str(), life(0) {}
   
-  lifestr(const std::string& s, int l) : str(s), life(l) {}
-  lifestr(const char* s, int l) : str(s ? s : ""), life(l) {}
-  
+  lifestr(const std::string& s, int l) : str(s){setlife(l);}
+  lifestr(const char* s, int l) : str(s ? s : ""){setlife(l);}
+
   lifestr(const lifestr& other) : str(other.str), life(other.life) {}
   
   lifestr(lifestr&& other) noexcept : str(std::move(other.str)), life(other.life) {
