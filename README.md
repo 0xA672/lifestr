@@ -1,5 +1,5 @@
 # lifestr
-A C++ string wrapper with a lifetime counter – print it a limited number of times.
+A C++ string wrapper with a lifetime counter – print it a limited number of times. 
 
 [![C++11](https://img.shields.io/badge/C%2B%2B-11-blue)](https://en.cppreference.com/w/cpp/11)
 [![Code Size](https://img.shields.io/github/languages/code-size/0xA672/lifestr)](https://github.com/0xA672/lifestr)
