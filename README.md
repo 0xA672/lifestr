@@ -2,6 +2,10 @@
 A C++ string wrapper with a lifetime counter – print it a limited number of times.
 
 [![C++11](https://img.shields.io/badge/C%2B%2B-11-blue)](https://en.cppreference.com/w/cpp/11)
+[![Code Size](https://img.shields.io/github/languages/code-size/0xA672/lifestr)](https://github.com/0xA672/lifestr)
+
+## Lience
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ```cpp
 #include "lifestr.hpp"
@@ -189,5 +193,4 @@ if (!optMsg->isalive()) {
 > Life exhaustion does **not** destroy the object.
 > Use `setlife()` to revive it, or let it go out of scope to free memory.
 
-## Lience
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
