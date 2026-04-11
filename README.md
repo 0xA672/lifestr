@@ -110,6 +110,81 @@ Default destructor.
 ### `friend std::ostream& operator<<(std::ostream& os, const lifestr& ls)`
 Inserts the stored string into the output stream `os`. **Does not consume life**.
 
+## More Examples：
+### Reviving a Depleted String with addlife()
+```cpp
+lifestr msg("I'll be back", 1);
+msg.print();            // life becomes 0
+msg.print();            // no output
+
+msg.addlife(2);         // revive with +2 life
+msg.print();            // outputs again
+```
+### Safe Life Reduction with reducelife()
+```cpp
+lifestr note("Important", 3);
+note.reducelife(10);    // life becomes 0, no exception thrown
+std::cout << "Life after reduction: " << note.getlife() << '\n'; // 0
+```
+### Consuming Life Manually
+```cpp
+lifestr token("One-time token", 1);
+if (token.consume()) {
+    std::cout << "Token used: " << token.getstring() << '\n';
+} else {
+    std::cout << "Token already used.\n";
+}
+```
+### Exhausting Life Immediately
+```cpp
+lifestr msg("I give up", 5);
+msg.exhaust();
+if (!msg.isalive()) {
+    std::cout << "Life exhausted.\n";
+}
+```
+### Progress Bar with lifepercentage()
+```cpp
+lifestr hp("Player", 30);
+int maxHp = 100;
+double percent = hp.lifepercentage(maxHp);
+std::cout << "HP: " << hp.getlife() << "/" << maxHp 
+          << " (" << percent << "%)\n";
+
+// Simulate a visual bar
+int barWidth = 20;
+int filled = static_cast<int>(percent / 100 * barWidth);
+std::cout << "[";
+for (int i = 0; i < barWidth; ++i) {
+    std::cout << (i < filled ? '#' : ' ');
+}
+std::cout << "]\n";
+```
+Output:
+```rust
+HP: 30/100 (30.0%)
+[######              ]
+```
+### Using operator<< for Debugging (No Life Consumed)
+```cpp
+lifestr debug("Debug message", 3);
+std::cout << "Current content: " << debug << '\n'; // life remains 3
+std::cout << "Remaining life: " << debug.getlife() << '\n';
+```
+### Combining with std::optional for Automatic Cleanup
+```cpp
+#include <optional>
+
+std::optional<lifestr> optMsg(std::in_place, "Temporary", 2);
+while (optMsg->print()) {}
+
+// Life depleted → destroy the object to free memory
+if (!optMsg->isalive()) {
+    optMsg.reset();
+}
+```
+
+
 > [!IMPORTANT]
 > Life exhaustion does **not** destroy the object.
 > Use `setlife()` to revive it, or let it go out of scope to free memory.
