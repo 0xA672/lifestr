@@ -95,6 +95,7 @@ public:
   }
   
   bool isalive() const { return life > 0; }
+  bool alive() const { return isalive(); }
   
   bool consume() {
     if (life <= 0) return false;
