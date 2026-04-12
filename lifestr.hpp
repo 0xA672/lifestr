@@ -7,7 +7,7 @@
 #include <stdexcept>
 
 struct lifestr {
-private:
+private: 
   std::string str;
   int life;
 
