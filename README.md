@@ -60,11 +60,20 @@ Copy assignment operator. Copies both string and life value from `other`.
 ### `lifestr& operator=(lifestr&& other) noexcept`
 Move assignment operator. Transfers string and life from `other`, then sets `other.life = 0`.
 
+> [!IMPORTANT]
+> **Both assignment operators are lvalue-qualified (the trailing `&`).**  
+> This intentionally prevents assignment to rvalues (temporaries).  
+> Code like `lifestr("hi", 3) = other;` will not compile — it's a design choice, not a bug.
+
 ### `bool print()`
 Prints the stored string followed by a newline to `std::cout`. If `life > 0`, decrements life by 1 and returns `true`. Otherwise, returns `false` and outputs nothing.
 
 ### `bool print(std::ostream& os)`
 Prints the stored string followed by a newline to the given output stream `os`. Life decrement behavior is the same as `print()`.
+
+> [!IMPORTANT]
+> **`print()` is a mutating operation, not a pure observer.**  
+> Each call consumes 1 life by design. For side-effect-free output, use `operator<<` (e.g. `std::cout << obj << '\n'`).
 
 ### `const std::string& getstring() const`
 Returns a const reference to the underlying `std::string`.
