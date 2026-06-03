@@ -23,7 +23,7 @@ public:
     other.life = 0;
   }
   
-  lifestr& operator=(lifestr&& other) & noexcept {
+  lifestr& operator=(const lifestr& other) & {
     if (this != &other) {
       str = other.str;
       life = other.life;
@@ -31,7 +31,7 @@ public:
     return *this;
   }
   
-  lifestr& operator=(lifestr&& other) noexcept {
+  lifestr& operator=(lifestr&& other) & noexcept {
     if (this != &other) {
       str = std::move(other.str);
       life = other.life;
@@ -118,4 +118,4 @@ public:
   }
 };
 
-#endif // LIFESTR_HPP
+#endif
