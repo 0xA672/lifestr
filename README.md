@@ -4,7 +4,7 @@ A C++ string wrapper with a lifetime counter – print it a limited number of ti
 [![C++11](https://img.shields.io/badge/C%2B%2B-11-blue)](https://en.cppreference.com/w/cpp/11)
 [![Code Size](https://img.shields.io/github/languages/code-size/0xA672/lifestr)](https://github.com/0xA672/lifestr)
 
-## Lience
+## License
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ```cpp
@@ -34,6 +34,9 @@ Hello, world!
 Hello, world!
 No more prints available.
 ```
+
+## Integration
+Just copy `lifestr.hpp` into your project and `#include` it.
 
 ## API Reference 
 ### `lifestr()`
