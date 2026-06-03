@@ -23,7 +23,7 @@ public:
     other.life = 0;
   }
   
-  lifestr& operator=(const lifestr& other) {
+  lifestr& operator=(lifestr&& other) & noexcept {
     if (this != &other) {
       str = other.str;
       life = other.life;
