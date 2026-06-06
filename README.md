@@ -43,43 +43,51 @@ Just copy `lifestr.hpp` into your project and `#include` it.
 Constructs an empty string with life = 0.
 
 ### `lifestr(const std::string& s, int l)`
-Constructs with a string s and initial life l. Throws std::invalid_argument if l < 0.
+Constructs with a string `s` and initial life `l`. Throws `std::invalid_argument` if `l < 0`.
 
 ### `lifestr(const char* s, int l)`
-Constructs with a C-string s and initial life l. If s is nullptr, treats it as empty string. Throws if l < 0.
+Constructs with a C-string `s` and initial life `l`. If `s` is `nullptr`, treats it as empty string. Throws if `l < 0`.
 
 ### `lifestr(const lifestr& other)`
 Copy constructor. Copies both string and life value.
 
 ### `lifestr(lifestr&& other) noexcept`
-Move constructor. Transfers string and life, then sets other.life = 0.
+Move constructor. Transfers the string from `other` and copies its life. `other` remains in a valid but unspecified state; its life is left unchanged.
 
 ### `lifestr& operator=(const lifestr& other)`
 Copy assignment operator. Copies both string and life value from `other`.
 
 ### `lifestr& operator=(lifestr&& other) noexcept`
-Move assignment operator. Transfers string and life from `other`, then sets `other.life = 0`.
+Move assignment operator. Transfers the string from `other` and copies its life. `other` remains in a valid but unspecified state; its life is left unchanged.
 
 > [!IMPORTANT]
-> **Both assignment operators are lvalue-qualified (the trailing `&`).**  
+> **Both assignment operators are lvalue‑qualified (the trailing `&`).**  
 > This intentionally prevents assignment to rvalues (temporaries).  
 > Code like `lifestr("hi", 3) = other;` will not compile — it's a design choice, not a bug.
 
 ### `bool print()`
-Prints the stored string followed by a newline to `std::cout`. If `life > 0`, decrements life by 1 and returns `true`. Otherwise, returns `false` and outputs nothing.
+Prints the stored string followed by a newline to `std::cout`.  
+If the stream is in a good state and `life > 0`, the string is written, life is decremented by 1, and `true` is returned.  
+If the stream is not good before output, or output fails (e.g. `failbit` is set after the write), `false` is returned **without** decrementing life.  
+Returns `false` immediately if `life <= 0`.
 
 ### `bool print(std::ostream& os)`
-Prints the stored string followed by a newline to the given output stream `os`. Life decrement behavior is the same as `print()`.
+Prints the stored string followed by a newline to the given output stream `os`.  
+Behaves identically to the parameterless `print()`, but applies stream state checks to `os`.
 
 > [!IMPORTANT]
-> **`print()` is a mutating operation, not a pure observer.**  
-> Each call consumes 1 life by design. For side-effect-free output, use `operator<<` (e.g. `std::cout << obj << '\n'`).
+> **`print()` is a mutating operation – it consumes 1 life per successful call.**  
+> For side‑effect‑free output, use `operator<<` (e.g. `std::cout << obj << '\n'`) or the `peek()` method.
+
+### `void peek(std::ostream& os = std::cout) const`
+Prints the stored string followed by a newline to stream `os` **without** consuming life.  
+Does nothing if `life <= 0`.
 
 ### `const std::string& getstring() const`
 Returns a const reference to the underlying `std::string`.
 
 ### `const char* cstr() const`
-Returns a pointer to a null-terminated C-string representation of the stored string.
+Returns a pointer to a null‑terminated C‑string representation of the stored string.
 
 ### `size_t length() const`
 Returns the length of the stored string.
@@ -91,7 +99,7 @@ Returns `true` if the stored string is empty.
 Replaces the stored string with `s`.
 
 ### `void setstring(const char* s)`
-Replaces the stored string with C-string `s`. If `s` is `nullptr`, the string becomes empty.
+Replaces the stored string with C‑string `s`. If `s` is `nullptr`, the string becomes empty.
 
 ### `void setlife(int l)`
 Sets the life counter to `l`. Throws `std::invalid_argument` if `l` is negative.
@@ -181,6 +189,12 @@ Output:
 HP: 30/100 (30.0%)
 [######              ]
 ```
+### Using peek() for Inspection (No Life Consumed)
+```cpp
+lifestr debug("Secret message", 3);
+debug.peek();                     // prints without consuming
+std::cout << "Life still: " << debug.getlife() << '\n'; // 3
+```
 ### Using operator<< for Debugging (No Life Consumed)
 ```cpp
 lifestr debug("Debug message", 3);
@@ -200,9 +214,6 @@ if (!optMsg->isalive()) {
 }
 ```
 
-
 > [!IMPORTANT]
 > Life exhaustion does **not** destroy the object.
 > Use `setlife()` to revive it, or let it go out of scope to free memory.
-
-
